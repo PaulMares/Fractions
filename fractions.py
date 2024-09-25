@@ -93,6 +93,21 @@ class Fraction:
 
         return new_frac.simplify()
 
+    def __truediv__(self, other:Self|int) -> Self:
+        """Divides self by other.
+        Currently supports Fraction and int.
+
+        :param other: Object to perform division with.
+        :return: A Fraction that is the result of dividing self by other, simplified."""
+        if isinstance(other, Fraction):
+            new_frac = Fraction(self.numerator * other.denominator, self.denominator * other.numerator)
+        elif isinstance(other, int):
+            new_frac = Fraction(self.numerator, self.denominator * other)
+        else:
+            raise NotImplementedError("Operations with {other.__class__} not supported (yet (if reasonable))")
+
+        return new_frac.simplify()
+
     def simplify(self) -> Self:
         """Simplifies self (not in-place) to its simplest form.
 
@@ -119,3 +134,10 @@ def least_common_multiplier(x:int, y:int) -> int:
     :return: The least common multiplier for x and y.
     """
     return x * y  # TODO: Change to calculate lcm
+
+def float_to_fraction(x:float) -> Fraction:
+    denominator = 1
+    while (x % 1) != 0:
+        denominator *= 10
+        x /= 10
+    return Fraction(int(x), denominator).simplify()
