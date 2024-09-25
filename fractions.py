@@ -1,3 +1,5 @@
+from typing import Self
+
 class Fraction:
     def __init__(self, numerator:int, denominator:int):
         """Create a new fraction.
@@ -14,14 +16,14 @@ class Fraction:
         self.denominator = denominator if denominator > 0 else -denominator
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return a string representation of the fraction.
 
         :return: Returns the fraction as a string of form 'numerator/denominator'.
         """
         return "%d/%d" % (self.numerator, self.denominator)
 
-    def __eq__(self, other:"Fraction"|int) -> bool:
+    def __eq__(self, other:Self|int) -> bool:
         """Check if self's value is equal to other.
         Simplifies Fraction types before testing.
         Currently supports Fraction and int.
@@ -38,7 +40,7 @@ class Fraction:
         else:
             return False
 
-    def __add__(self, other:"Fraction"|int) -> "Fraction":
+    def __add__(self, other:Self|int) -> Self:
         """Adds self and other.
         Currently supports Fraction and int.
 
@@ -62,17 +64,23 @@ class Fraction:
             new_frac.positive = False
         return new_frac.simplify()
 
-    def __neg__(self) -> "Fraction":
+    def __neg__(self) -> Self:
         """Negation of the fraction.
 
         :return: The negative of itself.
         """
         return Fraction(-self.numerator, self.denominator)
 
-    def __sub__(self, other:"Fraction"|int) -> "Fraction":
+    def __sub__(self, other:Self|int) -> Self:
+        """Subtracts other from self.
+        Currently supports Fraction and int.
+
+        :param other: Object to perform subtraction with.
+        :return: A Fraction that is the result of subtracting other from self, simplified.
+        """
         return self.__add__(-other)
 
-    def simplify(self) -> "Fraction":
+    def simplify(self) -> Self:
         """Simplifies self to its simplest form.
 
         :return: A simplified Fraction object.
@@ -81,6 +89,8 @@ class Fraction:
             return Fraction(int(self.numerator / self.denominator), 1)
         elif (self.denominator / self.numerator) % 1 == 0:
             return Fraction(1, int(self.denominator / self.numerator))
+        else:
+            return self
 
     def self_simplify(self):
         """Simplifies self in place."""
