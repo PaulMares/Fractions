@@ -139,5 +139,5 @@ def float_to_fraction(x:float) -> Fraction:
     denominator = 1
     while (x % 1) != 0:
         denominator *= 10
-        x /= 10
+        x *= 10
     return Fraction(int(x), denominator).simplify()
