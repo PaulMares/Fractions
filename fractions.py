@@ -38,7 +38,7 @@ class Fraction:
         elif isinstance(other, int):
             return self_simp.numerator == other and self_simp.denominator == 1
         else:
-            return False
+            raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
 
     def __add__(self, other:Self|int) -> Self:
         """Adds self and other.
@@ -58,7 +58,7 @@ class Fraction:
         elif isinstance(other, int):
             new_frac = Fraction(self.numerator + (other * self.denominator), self.denominator)
         else:
-            raise NotImplementedError(f"Addition with {other.__class__} not supported (yet (if reasonable))")
+            raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
 
         if new_frac.numerator < 0:
             new_frac.positive = False
@@ -79,6 +79,21 @@ class Fraction:
         :return: A Fraction that is the result of subtracting other from self, simplified.
         """
         return self.__add__(-other)
+
+    def __mul__(self, other:Self|int) -> Self:
+        """Multiplies self and other.
+        Currently supports Fraction and int.
+
+        :param other: Object to perform multiplication with.
+        :return: A Fraction that is the result of multiplying self and other, simplified."""
+        if isinstance(other, Fraction):
+            new_frac = Fraction(self.numerator * other.numerator, self.denominator * other.denominator)
+        elif isinstance(other, int):
+            new_frac = Fraction(self.numerator * other, self.denominator)
+        else:
+            raise NotImplementedError("Operations with {other.__class__} not supported (yet (if reasonable))")
+
+        return new_frac.simplify()
 
     def simplify(self) -> Self:
         """Simplifies self to its simplest form.
