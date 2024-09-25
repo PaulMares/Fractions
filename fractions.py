@@ -60,8 +60,6 @@ class Fraction:
         else:
             raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
 
-        if new_frac.numerator < 0:
-            new_frac.positive = False
         return new_frac.simplify()
 
     def __neg__(self) -> Self:
@@ -96,7 +94,7 @@ class Fraction:
         return new_frac.simplify()
 
     def simplify(self) -> Self:
-        """Simplifies self to its simplest form.
+        """Simplifies self (not in-place) to its simplest form.
 
         :return: A simplified Fraction object.
         """
@@ -108,7 +106,7 @@ class Fraction:
             return self
 
     def self_simplify(self):
-        """Simplifies self in place."""
+        """Simplifies self (in-place) to its simplest form."""
         simp = self.simplify()
         self.numerator = simp.numerator
         self.denominator = simp.denominator
