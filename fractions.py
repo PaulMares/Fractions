@@ -113,12 +113,8 @@ class Fraction:
 
         :return: A simplified Fraction object.
         """
-        if (self.numerator / self.denominator) % 1 == 0:
-            return Fraction(int(self.numerator / self.denominator), 1)
-        elif (self.denominator / self.numerator) % 1 == 0:
-            return Fraction(1, int(self.denominator / self.numerator))
-        else:
-            return self
+        gcd = greatest_common_divisor(self.denominator, self.numerator)
+        return Fraction(self.numerator // gcd, self.denominator // gcd)
 
     def self_simplify(self):
         """Simplifies self (in-place) to its simplest form."""
@@ -133,7 +129,21 @@ def least_common_multiplier(x:int, y:int) -> int:
     :param y: The second int.
     :return: The least common multiplier for x and y.
     """
-    return x * y  # TODO: Change to calculate lcm
+    return abs(int(x / greatest_common_divisor(x, y)) * y)
+
+def greatest_common_divisor(x:int, y:int) -> int:
+    a = abs(x)
+    b = abs(y)
+
+    if a == b:
+        return x
+
+    while b != 0:
+        t = b
+        b = a % b
+        a = t
+
+    return a
 
 def float_to_fraction(x:float) -> Fraction:
     denominator = 1
