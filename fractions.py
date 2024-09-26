@@ -108,6 +108,21 @@ class Fraction:
 
         return new_frac.simplify()
 
+    def __pow__(self, power) -> Self:
+        return Fraction(self.numerator ** power, self.denominator ** power)
+
+    def __int__(self):
+        return self.numerator // self.denominator
+
+    def __floor__(self):
+        return Fraction(self.numerator - (self.numerator % self.denominator), self.denominator)
+
+    def __ceil__(self):
+        return Fraction(self.numerator + self.denominator - (self.numerator % self.denominator), self.denominator)
+
+    def __floordiv__(self, other:Self|int) -> int:
+        return (self.__truediv__(other)).__int__()
+
     def simplify(self) -> Self:
         """Simplifies self (not in-place) to its simplest form.
 
