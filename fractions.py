@@ -13,7 +13,7 @@ class Fraction:
             raise ValueError("Denominator cannot be zero")
 
         self.numerator = numerator if denominator > 0 else -numerator
-        self.denominator = denominator if denominator > 0 else -denominator
+        self.denominator = abs(denominator)
 
 
     def __repr__(self) -> str:
