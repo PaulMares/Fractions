@@ -41,6 +41,10 @@ class FloatToFractionTestCases(unittest.TestCase):
         """Tests that a rational negative float converts to the equivalent fraction."""
         self.assertEqual(Fraction(-1,2), float_to_fraction(-0.5))
 
+    def test_decimal_limit(self):
+        """Tests that the decimal place limit works correctly."""
+        self.assertEqual(Fraction(333, 1000), float_to_fraction(1/3, 3))
+
 
 if __name__ == '__main__':
     unittest.main()
