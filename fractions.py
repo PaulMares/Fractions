@@ -40,6 +40,38 @@ class Fraction:
         else:
             raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
 
+    def __ne__(self, other:Self|int) -> bool:
+        """Check if self's value is not equal to other.
+        Simplifies Fraction types before testing.
+        Currently supports Fraction and int.
+
+        :param other: Another Object to test against.
+        :return: True if self is not equal to other, False otherwise.
+        """
+        return not self.__eq__(other)
+
+    def __gt__(self, other:Self|int) -> bool:
+        if isinstance(other, Fraction):
+            return (self.numerator * other.denominator) > (other.numerator * self.denominator)
+        elif isinstance(other, int):
+            return self.numerator > (other * self.denominator)
+        else:
+            raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
+
+    def __le___(self, other:Self|int) -> bool:
+        return not self.__gt__(other)
+
+    def __ge__(self, other:Self|int) -> bool:
+        if isinstance(other, Fraction):
+            return (self.numerator * other.denominator) >= (other.numerator * self.denominator)
+        elif isinstance(other, int):
+            return self.numerator >= (other * self.denominator)
+        else:
+            raise NotImplementedError(f"Operations with {other.__class__} not supported (yet (if reasonable))")
+
+    def __lt__(self, other:Self|int) -> bool:
+        return not self.__ge__(other)
+
     def __add__(self, other:Self|int) -> Self:
         """Adds self and other.
         Currently supports Fraction and int.
@@ -123,6 +155,9 @@ class Fraction:
     def __floordiv__(self, other:Self|int) -> int:
         return (self.__truediv__(other)).__int__()
 
+    def __abs__(self):
+        return Fraction(abs(self.numerator), self.denominator)
+
     def simplify(self) -> Self:
         """Simplifies self (not in-place) to its simplest form.
 
@@ -136,6 +171,23 @@ class Fraction:
         simp = self.simplify()
         self.numerator = simp.numerator
         self.denominator = simp.denominator
+
+    def equal_approx(self, other:Self|int, threshold:Self|int=None) -> bool:
+        """Checks if other is approximately equal to self by checking if it's within threshold of self.
+        Threshold defaults to 1/1000.
+        Currently supports Fraction and int.
+
+        :param other: The object to compare to.
+        :param threshold: The maximum difference allowed between self and other. Checked in both directions.
+        :return: True if other is between self and self + threshold (or between self and self - threshold),
+        False otherwise.
+        """
+        if threshold is None:
+            threshold = Fraction(1, 1000)
+
+        threshold = abs(threshold)
+
+        return self.__add__(threshold) > other > self.__sub__(threshold)
 
 def least_common_multiplier(x:int, y:int) -> int:
     """Finds the least common multiplier for two int.
@@ -160,9 +212,10 @@ def greatest_common_divisor(x:int, y:int) -> int:
 
     return a
 
-def float_to_fraction(x:float) -> Fraction:
+def float_to_fraction(x:float, decimal_places=-1) -> Fraction:
     denominator = 1
-    while (x % 1) != 0:
+    while (x % 1) != 0 and decimal_places != 0:
         denominator *= 10
         x *= 10
+        decimal_places -= 1
     return Fraction(int(x), denominator).simplify()
