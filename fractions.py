@@ -174,6 +174,7 @@ class Fraction:
 
     def equal_approx(self, other:Self|int, threshold:Self|int=None) -> bool:
         """Checks if other is approximately equal to self by checking if it's within threshold of self.
+        Threshold is an absolute magnitude and is checked as (self - threshold) and as (self + threshold).
         Threshold defaults to 1/1000.
         Currently supports Fraction and int.
 
@@ -199,6 +200,12 @@ def least_common_multiplier(x:int, y:int) -> int:
     return abs(int(x / greatest_common_divisor(x, y)) * y)
 
 def greatest_common_divisor(x:int, y:int) -> int:
+    """Finds the greatest common divisor for two int.
+
+    :param x: The first int.
+    :param y: The second int.
+    :return: The greatest common divisor for x and y.
+    """
     a = abs(x)
     b = abs(y)
 
@@ -213,6 +220,15 @@ def greatest_common_divisor(x:int, y:int) -> int:
     return a
 
 def float_to_fraction(x:float, decimal_places=-1) -> Fraction:
+    """Converts a float to a Fraction.
+    Iteratively multiplies the float by 10 until it becomes an int (or reaches the specified number of decimal places),
+    then sets the denominator to the appropriate exponentiation of 10 to make a Fraction of equal value.
+
+    :param x: The float to convert ot a Fraction.
+    :param decimal_places: The number of decimal places that will be used for the denominator. If negative, will use all
+                           decimal places. Defaults to -1 (all decimal places).
+    :return: A Fraction with the same value as the given float.
+    """
     denominator = 1
     while (x % 1) != 0 and decimal_places != 0:
         denominator *= 10
