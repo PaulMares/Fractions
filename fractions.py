@@ -146,6 +146,9 @@ class Fraction:
     def __int__(self):
         return self.numerator // self.denominator
 
+    def __float__(self):
+        return self.numerator / self.denominator
+
     def __floor__(self):
         return Fraction(self.numerator - (self.numerator % self.denominator), self.denominator)
 
